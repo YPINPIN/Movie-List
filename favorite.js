@@ -1,13 +1,13 @@
-const BASE_URL = "https://movie-list.alphacamp.io"
-const INDEX_URL = BASE_URL + "/api/v1/movies/"
-const POSTER_URL = BASE_URL + "/posters/"
+const BASE_URL = 'https://movie-list.alphacamp.io'
+const INDEX_URL = BASE_URL + '/api/v1/movies/'
+const POSTER_URL = BASE_URL + '/posters/'
 
-const favorites = JSON.parse(localStorage.getItem("favoriteMovies")) || []
+const favorites = JSON.parse(localStorage.getItem('favoriteMovies')) || []
 
-const dataPanel = document.querySelector("#data-panel")
+const dataPanel = document.querySelector('#data-panel')
 
 function renderMovieList(data) {
-  let rawHTML = ""
+  let rawHTML = ''
   data.forEach((item) => {
     rawHTML += `
       <div class="col-sm-3">
@@ -43,15 +43,15 @@ function renderMovieList(data) {
 }
 
 function showMovieModal(id) {
-  const modalTitle = document.querySelector("#movie-modal-title")
-  const modalImage = document.querySelector("#movie-modal-image")
-  const modalDate = document.querySelector("#movie-modal-date")
-  const modalDescription = document.querySelector("#movie-modal-description")
+  const modalTitle = document.querySelector('#movie-modal-title')
+  const modalImage = document.querySelector('#movie-modal-image')
+  const modalDate = document.querySelector('#movie-modal-date')
+  const modalDescription = document.querySelector('#movie-modal-description')
   axios.get(INDEX_URL + id).then((response) => {
     const data = response.data.results
     modalTitle.innerText = data.title
     modalImage.src = POSTER_URL + data.image
-    modalDate.innerText = "Release date: " + data.release_date
+    modalDate.innerText = 'Release date: ' + data.release_date
     modalDescription.innerText = data.description
   })
 }
@@ -70,19 +70,19 @@ function removeFromFavorite(id) {
   //刪除該筆電影
   favorites.splice(movieIndex, 1)
   //存回 local storage
-  localStorage.setItem("favoriteMovies", JSON.stringify(favorites))
+  localStorage.setItem('favoriteMovies', JSON.stringify(favorites))
   //更新頁面
   renderMovieList(favorites)
 }
 
 function onPanelClicked(event) {
-  if (event.target.matches(".btn-show-movie")) {
+  if (event.target.matches('.btn-show-movie')) {
     showMovieModal(Number(event.target.dataset.id))
-  } else if (event.target.matches(".btn-remove-favorite")) {
+  } else if (event.target.matches('.btn-remove-favorite')) {
     removeFromFavorite(Number(event.target.dataset.id))
   }
 }
 
-dataPanel.addEventListener("click", onPanelClicked)
+dataPanel.addEventListener('click', onPanelClicked)
 
 renderMovieList(favorites)

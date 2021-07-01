@@ -1,10 +1,10 @@
-const BASE_URL = "https://movie-list.alphacamp.io"
-const INDEX_URL = BASE_URL + "/api/v1/movies/"
-const POSTER_URL = BASE_URL + "/posters/"
-const dataPanel = document.querySelector("#data-panel")
-const searchForm = document.querySelector("#search-form")
-const searchInput = document.querySelector("#search-input")
-const viewSwitcher = document.querySelector("#view-switcher")
+const BASE_URL = 'https://movie-list.alphacamp.io'
+const INDEX_URL = BASE_URL + '/api/v1/movies/'
+const POSTER_URL = BASE_URL + '/posters/'
+const dataPanel = document.querySelector('#data-panel')
+const searchForm = document.querySelector('#search-form')
+const searchInput = document.querySelector('#search-input')
+const viewSwitcher = document.querySelector('#view-switcher')
 // movie data
 const movies = []
 // 關鍵字搜尋的列表
@@ -14,8 +14,8 @@ const MOVIES_PER_PAGE = 12
 // 當前頁面
 let curPage = 1
 // 顯示模式
-const CARD_VIEW = "CARD_VIEW"
-const LIST_VIEW = "LIST_VIEW"
+const CARD_VIEW = 'CARD_VIEW'
+const LIST_VIEW = 'LIST_VIEW'
 let viewType = CARD_VIEW
 
 // 列表初始化
@@ -30,7 +30,7 @@ function initMovieList(data) {
 
 // 列表顯示 傳入參數 data(顯示資料)、type(指定顯示模式)
 function renderMovieList(data, type = CARD_VIEW) {
-  let rawHTML = ""
+  let rawHTML = ''
   switch (type) {
     case CARD_VIEW:
       rawHTML = getHtmlForCard(data)
@@ -47,7 +47,7 @@ function renderMovieList(data, type = CARD_VIEW) {
 
 // Card 顯示的html
 function getHtmlForCard(data) {
-  let rawHTML = ""
+  let rawHTML = ''
   data.forEach((item) => {
     rawHTML += `
       <div class="col-sm-3">
@@ -128,7 +128,7 @@ function renderPaginator(amount) {
   //計算總頁數
   const numberOfPages = Math.ceil(amount / MOVIES_PER_PAGE)
   //製作 template
-  let rawHTML = ""
+  let rawHTML = ''
 
   for (let page = 1; page <= numberOfPages; page++) {
     rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>`
@@ -147,33 +147,33 @@ function getMoviesByPage(page) {
 }
 
 function showMovieModal(id) {
-  const modalTitle = document.querySelector("#movie-modal-title")
-  const modalImage = document.querySelector("#movie-modal-image")
-  const modalDate = document.querySelector("#movie-modal-date")
-  const modalDescription = document.querySelector("#movie-modal-description")
+  const modalTitle = document.querySelector('#movie-modal-title')
+  const modalImage = document.querySelector('#movie-modal-image')
+  const modalDate = document.querySelector('#movie-modal-date')
+  const modalDescription = document.querySelector('#movie-modal-description')
   axios.get(INDEX_URL + id).then((response) => {
     const data = response.data.results
     modalTitle.innerText = data.title
     modalImage.src = POSTER_URL + data.image
-    modalDate.innerText = "Release date: " + data.release_date
+    modalDate.innerText = 'Release date: ' + data.release_date
     modalDescription.innerText = data.description
   })
 }
 
 function addToFavorite(id) {
-  const list = JSON.parse(localStorage.getItem("favoriteMovies")) || []
+  const list = JSON.parse(localStorage.getItem('favoriteMovies')) || []
   const movie = movies.find((movie) => movie.id === id)
   if (list.some((movie) => movie.id === id)) {
-    return alert("此電影已經在收藏清單中！")
+    return alert('此電影已經在收藏清單中！')
   }
   list.push(movie)
-  localStorage.setItem("favoriteMovies", JSON.stringify(list))
+  localStorage.setItem('favoriteMovies', JSON.stringify(list))
 }
 
 function onPanelClicked(event) {
-  if (event.target.matches(".btn-show-movie")) {
+  if (event.target.matches('.btn-show-movie')) {
     showMovieModal(Number(event.target.dataset.id))
-  } else if (event.target.matches(".btn-add-favorite")) {
+  } else if (event.target.matches('.btn-add-favorite')) {
     addToFavorite(Number(event.target.dataset.id))
   }
 }
@@ -197,7 +197,7 @@ function onSearchFormSubmitted(event) {
 function onPaginatorClicked(event) {
   console.log(event)
   //如果被點擊的不是 a 標籤，結束
-  if (event.target.tagName !== "A") return
+  if (event.target.tagName !== 'A') return
 
   //透過 dataset 取得被點擊的頁數
   curPage = Number(event.target.dataset.page)
@@ -207,19 +207,19 @@ function onPaginatorClicked(event) {
 
 // 顯示模式切換
 function onViewSwitcherClicked(event) {
-  if (event.target.matches(".btn-view-card")) {
+  if (event.target.matches('.btn-view-card')) {
     renderMovieList(getMoviesByPage(curPage), CARD_VIEW)
-  } else if (event.target.matches(".btn-view-list")) {
+  } else if (event.target.matches('.btn-view-list')) {
     renderMovieList(getMoviesByPage(curPage), LIST_VIEW)
   }
 }
 
 // 註冊監聽
 function registerEventListener() {
-  dataPanel.addEventListener("click", onPanelClicked)
-  searchForm.addEventListener("submit", onSearchFormSubmitted)
-  paginator.addEventListener("click", onPaginatorClicked)
-  viewSwitcher.addEventListener("click", onViewSwitcherClicked)
+  dataPanel.addEventListener('click', onPanelClicked)
+  searchForm.addEventListener('submit', onSearchFormSubmitted)
+  paginator.addEventListener('click', onPaginatorClicked)
+  viewSwitcher.addEventListener('click', onViewSwitcherClicked)
 }
 
 axios
